@@ -14,7 +14,7 @@ public class Portada extends JFrame implements ActionListener  {
     private JPanel p2;
     private JPanel p3;
     private JButton mostrarIMC, salir;
-    private JTable tabla1, tabla2;
+    private JTable tabla1,   tabla2;
     public JTextArea porciones;
     private JTextField nombre, edad, peso, altura;
     private JLabel etiNombre, etiEdad, etiPeso, etiAltura, etiIMC, img1, img2;
@@ -116,8 +116,15 @@ public class Portada extends JFrame implements ActionListener  {
                 return true;
             }
         };
+        DefaultTableModel modelodias = new DefaultTableModel(1, 7) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         tabla1 = new JTable(modelo);
-        tabla1.setBounds(10, 30, 600, 300);
+        tabla1.setBounds(10, 35, 600, 300);
         tabla1.setRowHeight(60);
         modelo.setValueAt("<html><div style='text-align: center;'>Desayuno<br><br> 7:00-9:00</div></html>", 0, 0);
         modelo.setValueAt("<html><div style='text-align: center;'>Colacion<br><br> 10:00-11:00</div></html>", 1, 0);
@@ -166,6 +173,17 @@ public class Portada extends JFrame implements ActionListener  {
         tabla1.setDefaultEditor(Object.class, buttonRendererEditor);
         tabla1.setBorder(bordo3);
         p3.add(tabla1);
+
+        String[] diasSemana = {"  Lunes", "  Martes", "  Miercoles", "  Jueves", "  Viernes", "  Sabado", "  Domingo"};
+        for (int i = 0; i < diasSemana.length; i++) {
+            modelodias.setValueAt(diasSemana[i], 0, i);
+        }
+        tabla2 = new JTable(modelodias);
+        tabla2.setBounds(10, 10, 600, 30);
+        tabla2.setRowHeight(30);
+        tabla2.setBorder(bordo3);
+        tabla2.setGridColor(new Color(0, 0, 0));
+        p3.add(tabla2);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
