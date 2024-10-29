@@ -10,15 +10,16 @@ public class Portada extends JFrame implements ActionListener  {
     Border bordo2 = BorderFactory.createLineBorder(new Color(139, 154, 177), 2);
     Border bordo3 = BorderFactory.createLineBorder(new Color(0, 0, 0), 2);
 
+    private   double IMC;
     private JPanel p2;
     private JPanel p3;
     private JButton mostrarIMC, salir;
-    private JTable tabla1;
-    private JTextArea porciones;
+    private JTable tabla1, tabla2;
+    public JTextArea porciones;
     private JTextField nombre, edad, peso, altura;
     private JLabel etiNombre, etiEdad, etiPeso, etiAltura, etiIMC, img1, img2;
     Portada(){
-        setSize(1000, 800);
+        setSize(1150, 800);
         getContentPane().setBackground(new java.awt.Color(214, 221, 255));
         setLocationRelativeTo(null);
         setLayout(null);
@@ -38,7 +39,7 @@ public class Portada extends JFrame implements ActionListener  {
         p2.setLayout(null);
         add(p2);
         p3= new JPanel();
-        p3.setBounds(520, 10, 470, 750);
+        p3.setBounds(520, 10, 620, 750);
         p3.setLayout(null);
         add(p3);
 
@@ -103,16 +104,20 @@ public class Portada extends JFrame implements ActionListener  {
         salir.addActionListener(this);
         p1.add(salir);
 
+        porciones = new JTextArea();
+        porciones.setBounds(10, 370, 600,300);
+        porciones.setBorder(bordo2);
+        porciones.setEditable(false);
+        p3.add(porciones);
 
-        /////Tabla
-        DefaultTableModel modelo = new DefaultTableModel(5, 5) {
+        DefaultTableModel modelo = new DefaultTableModel(5, 7) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return true;
             }
         };
         tabla1 = new JTable(modelo);
-        tabla1.setBounds(10, 30, 450, 300);
+        tabla1.setBounds(10, 30, 600, 300);
         tabla1.setRowHeight(60);
         modelo.setValueAt("<html><div style='text-align: center;'>Desayuno<br><br> 7:00-9:00</div></html>", 0, 0);
         modelo.setValueAt("<html><div style='text-align: center;'>Colacion<br><br> 10:00-11:00</div></html>", 1, 0);
@@ -144,62 +149,72 @@ public class Portada extends JFrame implements ActionListener  {
         modelo.setValueAt("<html><div style='text-align: center;'>Merienda<br><br> 16:00-17:00</div></html>", 3, 4);
         modelo.setValueAt("<html><div style='text-align: center;'>Cena<br><br> 19:00-20:00</div></html>", 4, 4);
 
+        modelo.setValueAt("<html><div style='text-align: center;'>Desayuno<br><br> 7:00-9:00</div></html>", 0, 5);
+        modelo.setValueAt("<html><div style='text-align: center;'>Colacion<br><br> 10:00-11:00</div></html>", 1, 5);
+        modelo.setValueAt("<html><div style='text-align: center;'>Comida<br><br> 13:00-15:00</div></html>", 2, 5);
+        modelo.setValueAt("<html><div style='text-align: center;'>Merienda<br><br> 16:00-17:00</div></html>", 3, 5);
+        modelo.setValueAt("<html><div style='text-align: center;'>Cena<br><br> 19:00-20:00</div></html>", 4, 5);
 
+        modelo.setValueAt("<html><div style='text-align: center;'>Desayuno<br><br> 7:00-9:00</div></html>", 0, 6);
+        modelo.setValueAt("<html><div style='text-align: center;'>Colacion<br><br> 10:00-11:00</div></html>", 1, 6);
+        modelo.setValueAt("<html><div style='text-align: center;'>Comida<br><br> 13:00-15:00</div></html>", 2, 6);
+        modelo.setValueAt("<html><div style='text-align: center;'>Merienda<br><br> 16:00-17:00</div></html>", 3, 6);
+        modelo.setValueAt("<html><div style='text-align: center;'>Cena<br><br> 19:00-20:00</div></html>", 4, 6);
 
-        ButtonCellRendererEditor buttonRendererEditor = new ButtonCellRendererEditor();
+        ButtonCellRendererEditor buttonRendererEditor = new ButtonCellRendererEditor(porciones, this);
         tabla1.setDefaultRenderer(Object.class, buttonRendererEditor);
         tabla1.setDefaultEditor(Object.class, buttonRendererEditor);
         tabla1.setBorder(bordo3);
         p3.add(tabla1);
-        //Tabla
-
-        porciones = new JTextArea(6,8);
-        porciones.setBounds(10, 370, 450,300);
-        porciones.setBorder(bordo2);
-        porciones.setEditable(false);
-        p3.add(porciones);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
 
-
     @Override
     public void actionPerformed(ActionEvent evento) {
+
         if (evento.getSource() == mostrarIMC) {
-            double pesoV= Double.parseDouble(peso.getText());
-            double alturaV = Double.parseDouble(altura.getText());
-            double IMC = pesoV/ (alturaV * alturaV);
-            String IMC2 = String.format("%.3f", IMC);
-            etiIMC.setText("IMC: " + IMC2);
-            if (IMC<=18.5){
-                ImageIcon icono2 = new ImageIcon("src/esqueleto.png");
-                Image imagen2 = icono2.getImage().getScaledInstance(290, 240, Image.SCALE_SMOOTH);
-                ImageIcon calaca = new ImageIcon(imagen2);
-                img2.setBorder(bordo2);
-                img2.setIcon(calaca);
+        if(nombre.getText().equals("") && edad.getText().equals("")){
+                JOptionPane.showMessageDialog(null, "Por favor ingrese todos los datos solicitados");
+        }
+        else {
+                double peso1 = Double.parseDouble(peso.getText());
+                double altura1 = Double.parseDouble(altura.getText());
+                IMC = peso1 / (altura1 * altura1);
+                String IMC2 = String.format("%.3f",IMC );
+                etiIMC.setText("IMC: " + IMC2);
+                if (IMC <= 18.5) {
+                    ImageIcon icono2 = new ImageIcon("src/esqueleto.png");
+                    Image imagen2 = icono2.getImage().getScaledInstance(290, 240, Image.SCALE_SMOOTH);
+                    ImageIcon calaca = new ImageIcon(imagen2);
+                    img2.setIcon(calaca);
 
-            }
+                }
 
-            if (IMC>=25.0){
-                ImageIcon icono2 = new ImageIcon("src/calabaza.png");
-                Image imagen2 = icono2.getImage().getScaledInstance(290, 240, Image.SCALE_SMOOTH);
-                ImageIcon calabaza = new ImageIcon(imagen2);
-                img2.setIcon(calabaza);
+                if (IMC >= 25.0) {
+                    ImageIcon icono2 = new ImageIcon("src/calabaza.png");
+                    Image imagen2 = icono2.getImage().getScaledInstance(290, 240, Image.SCALE_SMOOTH);
+                    ImageIcon calabaza = new ImageIcon(imagen2);
+                    img2.setIcon(calabaza);
 
-            }
+                }
 
-            if (IMC>=18.5 && IMC<=25.0){
-                ImageIcon icono2 = new ImageIcon("src/fantasma.png");
-                Image imagen2 = icono2.getImage().getScaledInstance(290, 240, Image.SCALE_SMOOTH);
-                ImageIcon fantasma = new ImageIcon(imagen2);
-                img2.setIcon(fantasma);
-            }
+                if (IMC >= 18.5 && IMC <= 25.0) {
+                    ImageIcon icono2 = new ImageIcon("src/fantasma.png");
+                    Image imagen2 = icono2.getImage().getScaledInstance(290, 240, Image.SCALE_SMOOTH);
+                    ImageIcon fantasma = new ImageIcon(imagen2);
+                    img2.setIcon(fantasma);
+                }
+        }
         }
         if (evento.getSource() == salir) {
             dispose();
         }
+    }
+    public double getIMC() {
+        return IMC;
     }
 }
 
